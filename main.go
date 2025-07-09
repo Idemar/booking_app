@@ -3,14 +3,20 @@ package main
 import (
 	"booking_app/hjelper"
 	"fmt"
-	"strconv"
 )
 
 const kursBillettAntall = 50
 
 var kursNavn = "Go konferanse 2025"
 var antallBilletterTilgjengelig uint = 50
-var bookings = make([]map[string]string, 0)
+var bookings = make([]BrukerData, 0)
+
+type BrukerData struct {
+	forNavn         string
+	etterNavn       string
+	email           string
+	antallBilletter uint
+}
 
 func main() {
 
@@ -75,11 +81,12 @@ func hentBrukerInformasjon() (string, string, string, uint) {
 func bookBillett(brukerForNavn string, brukerEtterNavn string, brukerEmail string, brukerBillett uint) {
 	antallBilletterTilgjengelig = antallBilletterTilgjengelig - brukerBillett
 
-	var brukerData = make(map[string]string)
-	brukerData["fornavn"] = brukerForNavn
-	brukerData["etternavn"] = brukerEtterNavn
-	brukerData["epost"] = brukerEmail
-	brukerData["antallBilletter"] = strconv.FormatUint(uint64(brukerBillett), 10)
+	var brukerData = BrukerData{
+		forNavn:         brukerForNavn,
+		etterNavn:       brukerEtterNavn,
+		email:           brukerEmail,
+		antallBilletter: brukerBillett,
+	}
 
 	bookings = append(bookings, brukerData)
 
