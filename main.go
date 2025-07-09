@@ -14,26 +14,7 @@ func main() {
 	velkommen(kursNavn, kursBillettAntall)
 
 	for {
-		var brukerForNavn string
-		var brukerEtterNavn string
-		var brukerEmail string
-		var brukerBillett uint
-
-		fmt.Println()
-		fmt.Println("----------Ny booking----------")
-		fmt.Printf("Det er nå %v billetter igjen for %v\n", antallBilletterTilgjengelig, kursNavn)
-
-		fmt.Println("Skriv inn fornavn:")
-		fmt.Scan(&brukerForNavn)
-
-		fmt.Println("Skriv inn etternavn:")
-		fmt.Scan(&brukerEtterNavn)
-
-		fmt.Println("Skriv inn e-post:")
-		fmt.Scan(&brukerEmail)
-
-		fmt.Println("Hvor mange billetter ønsker du å bestille?")
-		fmt.Scan(&brukerBillett)
+		brukerForNavn, brukerEtterNavn, brukerEmail, brukerBillett := hentBrukerInformasjon()
 
 		erGyldigNavn, erGyldigEmail, erGyldigBillett := erGyldig(brukerForNavn, brukerEtterNavn, brukerEmail, brukerBillett, antallBilletterTilgjengelig)
 
@@ -44,6 +25,7 @@ func main() {
 			fmt.Printf("Takk for din bestilling %v %v du bestilte %v billett(er), du vil motta en bekreftelse på e-post: %v\n", brukerForNavn, brukerEtterNavn, brukerBillett, brukerEmail)
 
 			fmt.Printf("Booking liste: %v\n", bookings)
+			fmt.Println("Antall billetter igjen:", antallBilletterTilgjengelig)
 			fmt.Println(" ")
 		} else {
 			if !erGyldigNavn {
@@ -70,5 +52,29 @@ func erGyldig(brukerForNavn string, brukerEtterNavn string, brukerEmail string, 
 func velkommen(kursNavn string, antallBilletter uint) {
 	fmt.Printf("Velkommen til %v booking programmet.\n", kursNavn)
 	fmt.Printf("Kurset har totalt %v billetter.\n", antallBilletter)
-	fmt.Printf("Meld deg på kurs her:\n")
+	fmt.Printf("Meld deg på kurs her. Det er %v billetter igjen for booking.\n", antallBilletter)
+}
+
+func hentBrukerInformasjon() (string, string, string, uint) {
+	var brukerForNavn string
+	var brukerEtterNavn string
+	var brukerEmail string
+	var brukerBillett uint
+
+	fmt.Println()
+	fmt.Println("----------Ny booking----------")
+
+	fmt.Println("Skriv inn fornavn:")
+	fmt.Scan(&brukerForNavn)
+
+	fmt.Println("Skriv inn etternavn:")
+	fmt.Scan(&brukerEtterNavn)
+
+	fmt.Println("Skriv inn e-post:")
+	fmt.Scan(&brukerEmail)
+
+	fmt.Println("Hvor mange billetter ønsker du å bestille?")
+	fmt.Scan(&brukerBillett)
+
+	return brukerForNavn, brukerEtterNavn, brukerEmail, brukerBillett
 }
