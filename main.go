@@ -29,6 +29,7 @@ func main() {
 
 		if erGyldigNavn && erGyldigEmail && erGyldigBillett {
 			bookBillett(brukerForNavn, brukerEtterNavn, brukerEmail, brukerBillett)
+			sendBillettBekreftelse(brukerBillett, brukerForNavn, brukerEtterNavn, brukerEmail)
 
 			fmt.Printf("Booking liste: %v\n", bookings)
 			fmt.Println("Antall billetter igjen:", antallBilletterTilgjengelig)
@@ -92,4 +93,12 @@ func bookBillett(brukerForNavn string, brukerEtterNavn string, brukerEmail strin
 
 	fmt.Printf("Takk for din bestilling %v %v du bestilte %v billett(er), du vil motta en bekreftelse på e-post: %v\n", brukerForNavn, brukerEtterNavn, brukerBillett, brukerEmail)
 
+}
+
+func sendBillettBekreftelse(brukerBillett uint, brukerForNavn string, brukerEtterNavn string, brukerEmail string) {
+	var billett = fmt.Sprintf("%v billett(er) bestilt av %v %v.", brukerBillett, brukerForNavn, brukerEtterNavn)
+
+	fmt.Println("####################")
+	fmt.Printf("Billett bekreftelse:\n %v \n til e-post: %v\n", billett, brukerEmail)
+	fmt.Println("####################")
 }
