@@ -1,28 +1,28 @@
 package main
 
 import (
+	"booking_app/hjelper"
 	"fmt"
-	"strings"
+	"strconv"
 )
 
+const kursBillettAntall = 50
+
+var kursNavn = "Go konferanse 2025"
+var antallBilletterTilgjengelig uint = 50
+var bookings = make([]map[string]string, 0)
+
 func main() {
-	kursNavn := "Go konferanse 2025"
-	const kursBillettAntall = 50
-	var antallBilletterTilgjengelig uint = 50
-	var bookings []string
 
 	velkommen(kursNavn, kursBillettAntall)
 
 	for {
 		brukerForNavn, brukerEtterNavn, brukerEmail, brukerBillett := hentBrukerInformasjon()
 
-		erGyldigNavn, erGyldigEmail, erGyldigBillett := erGyldig(brukerForNavn, brukerEtterNavn, brukerEmail, brukerBillett, antallBilletterTilgjengelig)
+		erGyldigNavn, erGyldigEmail, erGyldigBillett := hjelper.ErGyldig(brukerForNavn, brukerEtterNavn, brukerEmail, brukerBillett, antallBilletterTilgjengelig)
 
 		if erGyldigNavn && erGyldigEmail && erGyldigBillett {
-			antallBilletterTilgjengelig = antallBilletterTilgjengelig - brukerBillett
-			bookings = append(bookings, brukerForNavn+" "+brukerEtterNavn)
-
-			fmt.Printf("Takk for din bestilling %v %v du bestilte %v billett(er), du vil motta en bekreftelse på e-post: %v\n", brukerForNavn, brukerEtterNavn, brukerBillett, brukerEmail)
+			bookBillett(brukerForNavn, brukerEtterNavn, brukerEmail, brukerBillett)
 
 			fmt.Printf("Booking liste: %v\n", bookings)
 			fmt.Println("Antall billetter igjen:", antallBilletterTilgjengelig)
@@ -40,13 +40,6 @@ func main() {
 		}
 
 	}
-}
-
-func erGyldig(brukerForNavn string, brukerEtterNavn string, brukerEmail string, brukerBillett uint, antallBilletterTilgjengelig uint) (bool, bool, bool) {
-	erGyldigNavn := len(brukerForNavn) >= 2 && len(brukerEtterNavn) >= 2
-	erGyldigEmail := strings.Contains(brukerEmail, "@") && strings.Contains(brukerEmail, ".")
-	erGyldigBillett := brukerBillett > 0 && brukerBillett <= antallBilletterTilgjengelig
-	return erGyldigNavn, erGyldigEmail, erGyldigBillett
 }
 
 func velkommen(kursNavn string, antallBilletter uint) {
@@ -77,4 +70,19 @@ func hentBrukerInformasjon() (string, string, string, uint) {
 	fmt.Scan(&brukerBillett)
 
 	return brukerForNavn, brukerEtterNavn, brukerEmail, brukerBillett
+}
+
+func bookBillett(brukerForNavn string, brukerEtterNavn string, brukerEmail string, brukerBillett uint) {
+	antallBilletterTilgjengelig = antallBilletterTilgjengelig - brukerBillett
+
+	var brukerData = make(map[string]string)
+	brukerData["fornavn"] = brukerForNavn
+	brukerData["etternavn"] = brukerEtterNavn
+	brukerData["epost"] = brukerEmail
+	brukerData["antallBilletter"] = strconv.FormatUint(uint64(brukerBillett), 10)
+
+	bookings = append(bookings, brukerData)
+
+	fmt.Printf("Takk for din bestilling %v %v du bestilte %v billett(er), du vil motta en bekreftelse på e-post: %v\n", brukerForNavn, brukerEtterNavn, brukerBillett, brukerEmail)
+
 }
